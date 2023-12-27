@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Ursa Major Workshop</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500&display=swap" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/normalize.css">
+	<style type="text/css">
+	body {
+		background: #111;
+		color: #efefef;
+		font-family: 'Zen Maru Gothic', serif;
+	}
+	main {
+		display: flex;
+		justify-content: center;
+		flex-flow: column nowrap;
+		height: 100vh;
+/*		Debug*/
+/*		* {
+			border: 1px solid white;
+		}*/
+	}
+	h1, h2 {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+		flex: 1 1 10vh;
+	}
+	h1 {
+		font-size: 64px;
+	}
+	h2 {
+		font-size: 48px;
+	}
+	#animation {
+		flex: 1 1 80vh;
+	}
+	</style>
+	<script type="text/javascript" src="/p5.min.js"></script>
+	<script type="text/javascript" src="/main.js"></script>
+</head>
+<body>
+	<main>
+		<h1>Ursa Major Workshop</h1>
+		<div id="animation"></div>
+		<h2>Look to the stars</h2>
+	</main>
+</body>
+</html>
