@@ -1,0 +1,12 @@
+ursamajorwork.shop, ursaminorwork.shop {
+	@softredir {
+		protocol http
+		not host ursamajorwork.shop
+	}
+	redir @softredir https://{host}{uri}
+
+	root * /opt/ursamajor/dist
+	file_server {
+		hide .git
+	}
+}

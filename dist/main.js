@@ -1,8 +1,3 @@
-const animate = () => {
-
-}
-
-
 window.addEventListener("load", () => {
     const sketch = (p) => {
 

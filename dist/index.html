@@ -4,10 +4,18 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Ursa Major Workshop</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#111111">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500&display=swap" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/normalize.css">
+	<script src="https://kit.fontawesome.com/6e7653c729.js" crossorigin="anonymous"></script>
 	<style type="text/css">
 	body {
 		background: #111;
@@ -19,10 +27,6 @@
 		justify-content: center;
 		flex-flow: column nowrap;
 		height: 100vh;
-/*		Debug*/
-/*		* {
-			border: 1px solid white;
-		}*/
 	}
 	h1, h2 {
 		display: table-cell;
@@ -39,6 +43,53 @@
 	#animation {
 		flex: 1 1 80vh;
 	}
+	#pointer {
+		opacity: 0;
+		position: absolute;
+		top: 68%;
+		left: 68%;
+		background: rgba(16, 16, 16, .5);
+
+		animation:
+			2s linear 2s fade,
+			5s ease-in 0s attention,
+			1s linear 0s fadeout
+		;
+	}
+
+	@keyframes fade {
+		0% {
+			opacity: 0;
+			display: none;
+		}
+		1% {
+			opacity: 0;
+			display: block;
+		}
+		100% {
+			opacity: 1;
+			display: block;
+		}
+	}
+
+	@keyframes attention {
+
+	}
+
+	@keyframes fadeout {
+		0% {
+			opacity: 1;
+			display: block;
+		}
+		1% {
+			opacity: 1;
+			display: block;
+		}
+		100% {
+			opacity: 0;
+			display: none;
+		}
+	}
 	</style>
 	<script type="text/javascript" src="/p5.min.js"></script>
 	<script type="text/javascript" src="/main.js"></script>
@@ -47,7 +98,9 @@
 	<main>
 		<h1>Ursa Major Workshop</h1>
 		<div id="animation"></div>
+
 		<h2>Look to the stars</h2>
 	</main>
+	<i id="pointer" class="fa-regular fa-hand-pointer fa-4x"></i>
 </body>
 </html>
