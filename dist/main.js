@@ -1,3 +1,5 @@
+
+const GOLDEN_RATIO = 1/1.618
 window.addEventListener("load", () => {
     const sketch = (p) => {
 
@@ -6,12 +8,13 @@ window.addEventListener("load", () => {
         const shiftHz = 0.05
         const shiftPeriod = 1/shiftHz
 
-        const sizeNoiseScale = 1.618
+        const sizeNoiseScale = GOLDEN_RATIO
         const shiftNoiseScale = sizeNoiseScale/2
         const starBaseSize = 8
         const starExtraSize = 24
-        // 48px grid spacing
-        const spacing = 48
+        const starBasePoints = 4
+
+        const spacing = 42
 
         const rippleControlLoopParams = {
             p: 1,
@@ -32,6 +35,8 @@ window.addEventListener("load", () => {
             vx: 0, vy: 0,
             ax: 0, ay: 0
         }
+
+        let starExtraPoints = []
 
         p.setup = () => {
             const el = document.getElementById("animation")
@@ -65,6 +70,16 @@ window.addEventListener("load", () => {
                 0, 0
             )
 
+            if (starExtraPoints.length !== gridHeight || starExtraPoints[0].length !== gridWidth){
+                starExtraPoints = []
+                for (var row = 0; row < gridHeight; row++) {
+                    starExtraPoints[row] = []
+                    for (var col = 0; col < gridWidth; col++) {
+                        starExtraPoints[row][col] = p.random([0,1,2,3,4])
+                    }
+                }
+            }
+
             if (rippleKinematics.x === null && rippleKinematics.y === null) {
                 rippleKinematics = {...rippleKinematics, x: p.width / 2, y: p.height / 2, }
             }
@@ -85,7 +100,7 @@ window.addEventListener("load", () => {
 
             rippleKinematics = p.doPhysicsStep(rippleKinematics)
 
-            // p.debugKinematics(rippleKinematics, targetRippleKinematics)
+            p.debugKinematics(rippleKinematics, targetRippleKinematics)
 
             for (let row = 0; row < gridHeight; row++) {
                 const rowFraction = row / (gridHeight - 1)
@@ -123,61 +138,47 @@ window.addEventListener("load", () => {
                     p.star(
                         starX + (starExtraSize * (xNoise-0.5)),
                         starY + (starExtraSize * (yNoise-0.5)),
-                        starBaseSize + starExtraSize * sizeNoise
+                        starBaseSize + starExtraSize * sizeNoise,
+                        starBasePoints + (starExtraPoints !== null ? starExtraPoints[row][col] : 0)
                     );
                 }
             }
         }
 
-        p.star = (x, y, d) => {
+        p.star = (x, y, d, pointCount) => {
             const r = d/2
-            const roundness = 1.0/1.618
-            const points = [
-                [+0, -1], // top
-                [-1, +0], // left
-                [+0, +1], // bottom
-                [+1, +0], // right
-            ]
-            // top to left, must start with a real vertex
+            const roundness = GOLDEN_RATIO/2
+
+            // must start with a real vertex
             p.beginShape()
+            const firstPoint = [0, -1]
             p.vertex(
-                x + r*points[0][0],
-                y + r*points[0][1]
+                x + firstPoint[0] * r,
+                y + firstPoint[1] * r
             )
+            let lastPoint = firstPoint
+            for (var i = 1; i < pointCount; i++) {
+                const angle = 2 * p.PI * (0.25 + i / pointCount)
+                // negative sine due to weird coordinate space
+                const point = [p.cos(angle), -p.sin(angle)]
+                p.bezierVertex(
+                    x + r*lastPoint[0] * roundness,
+                    y + r*lastPoint[1] * roundness,
+                    x + r*point[0] * roundness,
+                    y + r*point[1] * roundness,
+                    x + r*point[0],
+                    y + r*point[1]
+                )
+                lastPoint = point
+            }
+            // close last point to beginning
             p.bezierVertex(
-                x + r*points[0][0] * roundness,
-                y + r*points[0][1] * roundness,
-                x + r*points[1][0] * roundness,
-                y + r*points[1][1] * roundness,
-                x + r*points[1][0],
-                y + r*points[1][1]
-            )
-            // left to bottom
-            p.bezierVertex(
-                x + r*points[1][0] * roundness,
-                y + r*points[1][1] * roundness,
-                x + r*points[2][0] * roundness,
-                y + r*points[2][1] * roundness,
-                x + r*points[2][0],
-                y + r*points[2][1]
-            )
-            // bottom to right
-            p.bezierVertex(
-                x + r*points[2][0] * roundness,
-                y + r*points[2][1] * roundness,
-                x + r*points[3][0] * roundness,
-                y + r*points[3][1] * roundness,
-                x + r*points[3][0],
-                y + r*points[3][1]
-            )
-            // right to top
-            p.bezierVertex(
-                x + r*points[3][0] * roundness,
-                y + r*points[3][1] * roundness,
-                x + r*points[0][0] * roundness,
-                y + r*points[0][1] * roundness,
-                x + r*points[0][0],
-                y + r*points[0][1]
+                x + r*lastPoint[0] * roundness,
+                y + r*lastPoint[1] * roundness,
+                x + r*firstPoint[0] * roundness,
+                y + r*firstPoint[1] * roundness,
+                x + r*firstPoint[0],
+                y + r*firstPoint[1]
             )
             p.endShape()
         }
