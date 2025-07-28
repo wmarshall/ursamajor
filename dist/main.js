@@ -100,7 +100,7 @@ window.addEventListener("load", () => {
 
             rippleKinematics = p.doPhysicsStep(rippleKinematics)
 
-            p.debugKinematics(rippleKinematics, targetRippleKinematics)
+            // p.debugKinematics(rippleKinematics, targetRippleKinematics)
 
             for (let row = 0; row < gridHeight; row++) {
                 const rowFraction = row / (gridHeight - 1)
